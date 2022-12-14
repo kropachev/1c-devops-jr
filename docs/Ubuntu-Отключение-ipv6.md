@@ -6,7 +6,7 @@
 ```
 ip a
 ```
-![Alt text](images/ubuntu%20ipv6.png)
+![Alt text](images/ubuntu-ipv6.png)
 
 Для отключения протокола необходимо выполнить команды
 ```

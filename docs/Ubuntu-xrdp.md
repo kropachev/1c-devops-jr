@@ -5,7 +5,7 @@
 <details>
 <summary>Скриншот ошибки сетевого соединения</summary>
 
-![Alt text](images/ubuntu%20xrdp%20error.png)
+![Alt text](images/ubuntu-xrdp-error.png)
 
 </details>
 
@@ -15,7 +15,7 @@ sudo netstat -lntp
 ```
 
 Должна присутствовать такая строка
-![Alt text](images/ubuntu%20xrdp%20listen%20tcp.png)
+![Alt text](images/ubuntu-xrdp-listen-tcp.png)
 
 Ключевые параметры проверки: `tcp`, `0.0.0.0:3389`, `/xrdp`.
 
@@ -32,6 +32,6 @@ port=tcp://:3389
 
 Должно получиться так:
 
-![xrdp.ini](images/ubuntu%20xrdp%20ini.png)
+![xrdp.ini](images/ubuntu-xrdp-ini.png)
 
 Сохраняем файл, выходим и перезагружаемся.
