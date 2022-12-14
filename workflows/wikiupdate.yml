@@ -1,0 +1,50 @@
+name: Docs/Wiki Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+  repository_dispatch:
+    types: [docs]
+  gollum:
+
+env:
+  GIT_AUTHOR_EMAIL: 87801165+kropachev@users.noreply.github.com
+  GIT_AUTHOR_NAME: kropachev
+
+jobs:
+  job-sync-docs-to-wiki:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'gollum'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Sync docs to wiki
+        uses: newrelic/wiki-sync-action@master
+        with:
+          source: docs
+          destination: wiki
+          token: ${{ secrets.NEWRELIC_BOT_TOKEN }}
+          gitAuthorName: ${{ github.event.pusher.name }}
+          gitAuthorEmail: ${{ github.event.pusher.email }}
+
+  job-sync-wiki-to-docs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'gollum'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.NEWRELIC_BOT_TOKEN }}
+          ref: main
+      - name: Sync Wiki to Docs
+        uses: newrelic/wiki-sync-action@master
+        with:
+          source: wiki
+          destination: docs
+          token: ${{ secrets.NEWRELIC_BOT_TOKEN }}
+          gitAuthorName: ${{ env.GIT_AUTHOR_NAME }}
+          gitAuthorEmail: ${{ env.GIT_AUTHOR_EMAIL }}
+          branch: main				
