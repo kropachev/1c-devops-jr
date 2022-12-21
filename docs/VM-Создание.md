@@ -18,7 +18,7 @@
 Если галка уже стоит, то сразу запускаем Hyper-V Manager.
 
 Нажимаем пуск и вводим hyper-v и выбираем приложение Hyper-V Manager.
-![Alt text](VM-Hyper-V-Manager.png)
+![Alt text](images/VM-Hyper-V-Manager.png)
 
 Hyper-V Manager состоит из четырех окон
 
@@ -58,14 +58,14 @@ Hyper-V Manager состоит из четырех окон
 **Store the virtual machine in a different location** - Советую поставить галку и указать путь, где будет храниться виртуальная машина.
 
 Далее.
-![Alt text](VM-Hyper-V-Wizard-Specify-Name-and-Location.png)
+![Alt text](images/VM-Hyper-V-Wizard-Specify-Name-and-Location.png)
 
 Закладка **Specify Generation**.
 
 Выбирайте **Generation 2**.
 
 Далее.
-![Alt text](VM-Hyper-V-Wizard-Specify-Generation.png)
+![Alt text](images/VM-Hyper-V-Wizard-Specify-Generation.png)
 
 Закладка **Assign Memory**.
 
@@ -74,14 +74,14 @@ Hyper-V Manager состоит из четырех окон
 Ну и поставить галку **Use Dynamic Memory for this virtual machine**.
 
 Далее.
-![Alt text](VM-Hyper-V-Wizard-Assign-Memory.png)
+![Alt text](images/VM-Hyper-V-Wizard-Assign-Memory.png)
 
 Закладка **Configure Networking**.
 
 Выбираем созданный ранее виртуальный коммутатор.
 
 Далее
-![Alt text](VM-Hyper-V-Wizard-Configure-Networking.png)
+![Alt text](images/VM-Hyper-V-Wizard-Configure-Networking.png)
 
 Закладка **Virtual Hard Disk**.
 
@@ -96,7 +96,7 @@ Hyper-V Manager состоит из четырех окон
 **Size** - Опять же, сколько не жалко. Смотрите, сколько доступно, исходя из этого выбирайте размер. Потом можно будет изменить, но не так просто.
 
 Далее.
-![Alt text](VM-Hyper-V-Wizard-Connect-Virtual-Hard-Disk.png)
+![Alt text](images/VM-Hyper-V-Wizard-Connect-Virtual-Hard-Disk.png)
 
 Закладка **Installation Options**.
 
@@ -107,7 +107,7 @@ Hyper-V Manager состоит из четырех окон
 Закладка **Summary**.
 
 Любуемся выбранными значениями и нажимаем Финиш.
-![Alt text](VM-Hyper-V-Wizard-Completing.png)
+![Alt text](images/VM-Hyper-V-Wizard-Completing.png)
 
 Виртуальная машина создана но требуются дополнительные настройки.
 
@@ -118,17 +118,17 @@ Hyper-V Manager состоит из четырех окон
 Раздел **Security**.
 
 Убираем галку **Enable Security Boot**.
-![Alt text](VM-Hyper-V-Settings-Security.png)
+![Alt text](images/VM-Hyper-V-Settings-Security.png)
 
 Раздел **Memory**.
 
 В поле **Maximum RAM** ставим максимальный объем памяти, который мы готовы выделить виртуальной машине. По умолчанию в этом поле стоит очень больше число, если не ограничить, то виртулка съест всю память и все сломается.
-![Alt text](VM-Hyper-V-Settings-Memory.png)
+![Alt text](images/VM-Hyper-V-Settings-Memory.png)
 
 Раздел **Processor**.
 
 А вот процессорных мощностей можно добавить. По умолчанию доступен 1 логический процессор. Давайте дадим половину от всех мощностей. Ориентируйтесь на поле **Percent of total system resources**.
-![Alt text](VM-Hyper-V-Settings-Processor.png)
+![Alt text](images/VM-Hyper-V-Settings-Processor.png)
 
 Жмем **Apply** для сохранения настроек..
 
@@ -144,7 +144,7 @@ Hyper-V Manager состоит из четырех окон
 
 Теперь жмем **Ok**.
 
-![Alt text](VM-Hyper-V-Settings-dvd-image.png)
+![Alt text](images/VM-Hyper-V-Settings-dvd-image.png)
 
  
 
