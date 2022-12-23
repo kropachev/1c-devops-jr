@@ -27,8 +27,8 @@ jobs:
           source: docs
           destination: wiki
           token: ${{ secrets.NEWRELIC_BOT_TOKEN_1C_DEVOPS_JR }}
-          gitAuthorName: ${{ github.event.pusher.name }}
-          gitAuthorEmail: ${{ github.event.pusher.email }}
+          gitAuthorName: ${{ env.GIT_AUTHOR_NAME }}
+          gitAuthorEmail: ${{ env.GIT_AUTHOR_EMAIL }}
 
   job-sync-wiki-to-docs:
     runs-on: ubuntu-latest
