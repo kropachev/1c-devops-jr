@@ -44,7 +44,7 @@
 
 Включив этап `initSteps` может появиться ошибка **Temporary failure in name resolution**. Для этого можно указать соответствие имени и ip, аналогично hosts.  этого идем в **Manage Jenkins** - **Manage nodes and clouds** - **Configure Clouds**, спускаемся вниз и жмем **Docker Agent templates...**. В открывшемся списке найти **Additional hosts (newline-separated)**, в этом поле внести соответствия.
 
-![Alt text](images/jenkins-Additional-hosts.png)
+![Alt text](images/jenkins-additional-hosts.png)
 
 Если хранилище расположено в сетевой папке и не опубликовано на сервере хранилищ (скорее всего так), то придется сначала смонтировать сетевую папку на сервер с докером, а потом пробросить volume к этой папке.
 
