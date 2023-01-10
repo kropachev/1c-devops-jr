@@ -74,7 +74,7 @@ VOLUME /var/onecrep /var/onecrep
 
 **Manage Jenkins** - **Manage nodes and clouds** - **Configure Clouds**.
 
-Жмем Docker Agent templates и в шаблоне с платфрмой (номер платформы в labels) ищем раздел 
+Жмем Docker Agent templates и в шаблоне с платформой (номер платформы в labels) ищем раздел 
 
 **Host Binds (newline-separated)**. Добавляем строку
 

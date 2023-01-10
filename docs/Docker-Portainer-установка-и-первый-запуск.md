@@ -15,7 +15,7 @@
 curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
 ```
 
-Ошибка `curl: (60) SSL certificate problem: unable to get local issuer certificate` может появляться при работы из закрытой сети. Следуюет добавить ключ -k, для разрешения создания незащищенного подключения:
+Ошибка `curl: (60) SSL certificate problem: unable to get local issuer certificate` может появляться при работы из закрытой сети. Следует добавить ключ -k, для разрешения создания незащищенного подключения:
 
 ```
 curl -L -k https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml

@@ -12,7 +12,7 @@ Failed to connect to github.com port 443 after 21128 ms: Timed out
 git config --global http.proxy http://your-proxy.net:80/
 ```
 
-Для отключения прокс:
+Для отключения прокси:
 ```
 git config --global --unset http.proxy
 ```

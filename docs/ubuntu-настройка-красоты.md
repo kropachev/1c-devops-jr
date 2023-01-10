@@ -1,8 +1,8 @@
-# Ubuntu, настрока красоты
+# Ubuntu, настройка красоты
 
-Кликаем прапвой кнопкой по рабочуму столу, выбираем Desktop Icons Settings. Оказываемся в окне настроек, разделе Appearence.
+Кликаем правой кнопкой по рабочему столу, выбираем Desktop Icons Settings. Оказываемся в окне настроек, разделе Appearence.
 
-Panel mode - отклучаем
+Panel mode - отключаем
 
 position on screen - bottom
 

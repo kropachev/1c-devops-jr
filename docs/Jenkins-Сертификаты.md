@@ -1,6 +1,6 @@
 # Сертификаты для Jenkins
 
-Решение ощибки `javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated`.
+Решение ошибки `javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated`.
 
 Необходимо пробросить папку с сертификатами хоста в контейнер с Jenkins. Для этого монтируем том с путем `/usr/share/ca-certificates/extra`.  На хосте к этому моменту уже должен быть установлен сертификат.
 

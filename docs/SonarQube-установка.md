@@ -41,7 +41,7 @@ docker-compose up -d
 
 Возвращаемся в Jenkins - **Manage Jenkins** - **Configure System**.
 
-Ищмем разрел **SonarQube Servers**, жмем **Add SonarQube**.
+Ищем раздел **SonarQube Servers**, жмем **Add SonarQube**.
 
 Name: SonarQube
 

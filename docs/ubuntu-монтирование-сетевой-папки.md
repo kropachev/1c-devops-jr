@@ -9,4 +9,4 @@ sudo mount -t cifs -o username=user1c,password=password1c,domain=ad,uid=1000,ioc
 
 `//localserver/1crepository` - Сетевой путь.
 
-`/var/onecrep` - локальный каталог, в котороый буде смонтирован сетевой путь.
+`/var/onecrep` - локальный каталог, в который буде смонтирован сетевой путь.
