@@ -54,4 +54,18 @@ no label, UUID=43fbb832-6794-4650-9964-60ff9e7dd6b9
 sudo swapon /swapfile
 ```
 
+Если при каждой перезагрузки swap пропадает, то нужно изменить файл `/etc/fstab`.
+
+Бэкапим файл
+```
+sudo cp /etc/fstab /etc/fstab.bak
+```
+
+Добавляем нужные строки
+
+```
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+Перезагружаемся для проверки
+
 Готово.
