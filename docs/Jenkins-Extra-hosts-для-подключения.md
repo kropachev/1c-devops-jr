@@ -9,6 +9,6 @@
 Внизу добавляем строку соответствия адреса из сертификата и IP.
 
 ```
-swarm-manager:10.53.66.21
+swarm-manager:192.168.1.50
 ```
 ![Alt text](images/jenkins-extrahosts.png)
