@@ -40,7 +40,7 @@ docker run jenkins/jenkins:lts-jdk11
     * Pipeline Configuration History
     * Pipeline GitHub Notify Step
     * Pipeline implementation for Blue Ocean
-    * Pipeline Multibranch with defaults
+    * Pipeline: Multibranch with defaults
     * Pipeline timeline
     * Pipeline Utility Steps
     * SonarQube Scanner
