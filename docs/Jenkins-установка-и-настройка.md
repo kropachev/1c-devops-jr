@@ -22,7 +22,7 @@ docker run jenkins/jenkins:lts-jdk11
     * Matrix Authorization Strategy
     * PAM Authentication
     * LDAP
-    * Включаем плагины:
+* Включаем плагины:
     * Dashboard View
     * SSH Agent
     * JUnit
