@@ -8,6 +8,9 @@
 
 Ресурс для перевода в юникод - Юникод-кодировщик - [Таблица символов Юникода (unicode-table.com)](https://unicode-table.com/ru/tools/decoder/)
 
+Файлы с настройкой поддержки "редактирование запрещено" тоже не имеет смысла проверять.
+Такое исключение указывается с помощью `sonar.bsl.languageserver.skipSupport=with support locked`.
+
 Пример файла:
 
 ```properties
@@ -20,4 +23,6 @@ sonar.sourceEncoding=UTF-8
 
 sonar.inclusions=**/*.bsl
 sonar.cpd.exclusions=**/\u0420\u0435\u0433\u043b\u0430\u043c\u0435\u043d\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439\u041e\u0442\u0447\u0435\u0442*/**/*.*
+
+sonar.bsl.languageserver.skipSupport=with support locked
 ```
