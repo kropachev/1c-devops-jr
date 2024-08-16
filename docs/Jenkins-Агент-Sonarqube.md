@@ -2,16 +2,18 @@
 
 К этому моменту контейнер SonarQube должен быть уже установлен.
 
-**Dashboard** - **Manage Jenkins** - **Manage nodes and clouds** - **Configure Clouds**.
+**Dashboard** - **Manage Jenkins** - **Clouds** - **Docker Swarm**.
 
-Скролим вниз, до кнопки **Docker Agent templates**. Нажимаем.
+**Configure** 
+
+Скролим вниз, до кнопки **Docker Agent templates**. Нажимаем и далее жмем **Add Docker Agent Template**
 
 **Labels**: `sonar`
 
-**Image**: `astrizhachuk/sonar-scanner-cli:latest` 
-*(см kropachev/sonar-scanner-cli: Sonar Scanner for GitLab CI/CD and Jenkins (github.com))*
+**Image**: `sonarsource/sonar-scanner-cli:latest` 
 
-**Command**: не меняем.
+**Command**: перед curl добавляем `apk add openssh && apk add curl &&`
+![alt text](images/sonar-agent-command.png)
 
 **Working Directory**: `/home/jenkins`
 
