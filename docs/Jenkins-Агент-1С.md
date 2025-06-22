@@ -12,6 +12,10 @@ git clone https://github.com/kropachev/onec-docker
 
 Создаем копию файла **.onec.env.example** и переименовываем его в **.env**.
 
+```
+cp .onec.env.example .env
+```
+
 Внутри файла указываем нужную нам платформу и версию edt.
 
 **ONEC_VERSION**=8.3.21.1302 (версия нужной платформы)
