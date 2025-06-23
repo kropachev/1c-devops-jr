@@ -2,7 +2,6 @@ baseURL = "https://1c-devops-jr.kropachev.digital/"
 languageCode = "ru-ru"
 title = "1C DevOps JR"
 theme = "hugo-theme-stack"
-contentDir = "docs"
 
 [params.homepage]
   image = "https://github.com/kropachev.png"
