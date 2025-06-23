@@ -24,6 +24,19 @@ jobs:
           mkdir -p hugo-site/docs
           cp -r docs/* hugo-site/docs/
 
+      - name: Concatenate all docs to _index.md
+        run: |
+          mkdir -p hugo-site/content
+          echo '---' > hugo-site/content/_index.md
+          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
+          echo '---' >> hugo-site/content/_index.md
+          echo '' >> hugo-site/content/_index.md
+
+          find docs -maxdepth 1 -type f -name "*.md" | sort | while read file; do
+            echo -e "\n\n<!-- ========== $file ========== -->\n\n" >> hugo-site/content/_index.md
+            cat "$file" >> hugo-site/content/_index.md
+          done
+
       - name: Build site
         run: hugo --source hugo-site --minify
 
