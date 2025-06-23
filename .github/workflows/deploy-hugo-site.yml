@@ -19,6 +19,11 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
+      - name: Copy docs for Hugo build
+        run: |
+          mkdir -p hugo-site/docs
+          cp -r docs/* hugo-site/docs/
+
       - name: Build site
         run: hugo --source hugo-site --minify
 
