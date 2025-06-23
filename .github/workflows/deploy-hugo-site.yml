@@ -19,18 +19,30 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
+      - name: Debug: list docs/ files
+        run: |
+          echo "===[ docs/ contents ]==="
+          ls -la docs/ || echo "docs/ not found"
+
       - name: Concatenate all docs to _index.md
         run: |
+          echo "===[ Creating hugo-site/content/_index.md ]==="
           mkdir -p hugo-site/content
+
           echo '---' > hugo-site/content/_index.md
           echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
           echo '---' >> hugo-site/content/_index.md
           echo '' >> hugo-site/content/_index.md
 
-          find docs -maxdepth 1 -type f -name "*.md" | sort | while read file; do
+          echo "===[ Concatenating files... ]==="
+          ls docs/*.md | sort | while read file; do
+            echo "Appending: $file"
             echo -e "\n\n<!-- ========== $file ========== -->\n\n" >> hugo-site/content/_index.md
             cat "$file" >> hugo-site/content/_index.md
           done
+
+          echo "===[ Preview of _index.md ]==="
+          head -n 50 hugo-site/content/_index.md || echo "File not found"
 
       - name: Build site
         run: hugo --source hugo-site --minify
