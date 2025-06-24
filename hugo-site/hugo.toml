@@ -3,5 +3,13 @@ languageCode = "ru-ru"
 title = "1C DevOps JR"
 theme = "hugo-theme-stack"
 
+[params]
+  toc = true
+
 [params.homepage]
   image = "https://github.com/kropachev.png"
+
+[[menu.main]]
+  name = "Документация"
+  url = "/"
+  weight = 1

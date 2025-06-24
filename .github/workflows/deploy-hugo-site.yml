@@ -7,7 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -19,32 +18,30 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: Debug list docs files
+      - name: Debug – list docs files
         run: |
-          echo "===[ docs/ contents ]==="
+          echo "=== docs/ contents ==="
           ls -la docs/ || echo "docs/ not found"
 
       - name: Concatenate all docs to _index.md
         run: |
-          echo "===[ Concatenating files... ]==="
-          mkdir -p hugo-site/content/docs
-          cat <<EOF > hugo-site/content/docs/_index.md
----
-title: "1C DevOps JR — Документация"
----
-
-EOF
+          echo "===[ Creating hugo-site/content/_index.md ]==="
+          mkdir -p hugo-site/content
+          echo "---" > hugo-site/content/_index.md
+          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
+          echo "---" >> hugo-site/content/_index.md
+          echo "" >> hugo-site/content/_index.md
 
           for f in docs/*.md; do
             echo "Appending: $f"
-            echo "" >> hugo-site/content/docs/_index.md
-            echo "<!-- ========== $f ========== -->" >> hugo-site/content/docs/_index.md
-            cat "$f" >> hugo-site/content/docs/_index.md
-            echo "" >> hugo-site/content/docs/_index.md
+            echo "" >> hugo-site/content/_index.md
+            echo "<!-- ========== $f ========== -->" >> hugo-site/content/_index.md
+            cat "$f" >> hugo-site/content/_index.md
+            echo "" >> hugo-site/content/_index.md
           done
 
           echo "===[ Preview of _index.md ]==="
-          head -n 30 hugo-site/content/docs/_index.md || echo "File not found"
+          head -n 30 hugo-site/content/_index.md || echo "File not found"
 
       - name: Build site
         run: hugo --source hugo-site --minify
@@ -54,4 +51,3 @@ EOF
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./hugo-site/public
-  
