@@ -29,6 +29,7 @@ jobs:
 
           echo '---' > hugo-site/content/_index.md
           echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
+          echo 'showTableOfContents: true' >> hugo-site/content/_index.md
           echo '---' >> hugo-site/content/_index.md
           echo '' >> hugo-site/content/_index.md
 
@@ -40,9 +41,7 @@ jobs:
           done
 
           echo "===[ Preview of _index.md ]==="
-          echo "------------------------------------------------------------"
-          cat hugo-site/content/_index.md | head -n 50 || echo "File not found"
-          echo "------------------------------------------------------------"
+          head -n 30 hugo-site/content/_index.md || echo "File not found"
 
       - name: "Build site"
         run: hugo --source hugo-site --minify
