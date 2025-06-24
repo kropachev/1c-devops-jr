@@ -19,37 +19,32 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: Debug list docs/ files
+      - name: Debug list docs files
         run: |
           echo "===[ docs/ contents ]==="
           ls -la docs/ || echo "docs/ not found"
 
-      - name: Concatenate all docs to docs.md
+      - name: Concatenate all docs to _index.md
         run: |
-          echo "===[ Creating hugo-site/content/docs.md ]==="
-          mkdir -p hugo-site/content
-          echo "---" > hugo-site/content/docs.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/docs.md
-          echo "toc: true" >> hugo-site/content/docs.md
-          echo "---" >> hugo-site/content/docs.md
-          echo "" >> hugo-site/content/docs.md
+          echo "===[ Concatenating files... ]==="
+          mkdir -p hugo-site/content/docs
+          cat <<EOF > hugo-site/content/docs/_index.md
+---
+title: "1C DevOps JR — Документация"
+---
 
-          for file in docs/*.md; do
-            echo "Appending: $file"
-            echo "<!-- ========== $file ========== -->" >> hugo-site/content/docs.md
-            echo "" >> hugo-site/content/docs.md
-            cat "$file" >> hugo-site/content/docs.md
-            echo "" >> hugo-site/content/docs.md
-            echo "" >> hugo-site/content/docs.md
+EOF
+
+          for f in docs/*.md; do
+            echo "Appending: $f"
+            echo "" >> hugo-site/content/docs/_index.md
+            echo "<!-- ========== $f ========== -->" >> hugo-site/content/docs/_index.md
+            cat "$f" >> hugo-site/content/docs/_index.md
+            echo "" >> hugo-site/content/docs/_index.md
           done
 
-          echo "===[ Preview of docs.md ]==="
-          head -n 30 hugo-site/content/docs.md || echo "File not found"
-
-      - name: Copy images
-        run: |
-          mkdir -p hugo-site/static/images
-          cp -r docs/images/* hugo-site/static/images/ || echo "No images found"
+          echo "===[ Preview of _index.md ]==="
+          head -n 30 hugo-site/content/docs/_index.md || echo "File not found"
 
       - name: Build site
         run: hugo --source hugo-site --minify
@@ -58,4 +53,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: hugo-site/public
+          publish_dir: ./hugo-site/public
