@@ -11,5 +11,5 @@ theme = "hugo-theme-stack"
 
 [[menu.main]]
   name = "Документация"
-  url = "/docs/"
+  url = "/page/docs/"
   weight = 1
