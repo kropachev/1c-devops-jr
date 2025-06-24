@@ -13,40 +13,39 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Hugo
+      - name: "Setup Hugo"
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: Debug list docs/ files
+      - name: "Debug – list docs files"
         run: bash -c 'ls -la docs/ || echo "docs/ not found"'
 
-      - name: Concatenate all docs to _index.md
-        run: bash -c '
-          echo "===[ Creating hugo-site/content/_index.md ]==="
+      - name: "Concatenate all docs to _index.md"
+        run: |
           mkdir -p hugo-site/content
 
-          echo "---" > hugo-site/content/_index.md
-          echo "title: \"1C DevOps JR — Документация\"" >> hugo-site/content/_index.md
-          echo "---" >> hugo-site/content/_index.md
-          echo "" >> hugo-site/content/_index.md
+          cat <<EOF > hugo-site/content/_index.md
+---
+title: "1C DevOps JR — Документация"
+---
+EOF
 
           echo "===[ Concatenating files... ]==="
           for file in $(ls docs/*.md | sort); do
             echo "Appending: $file"
-            echo -e "\\n\\n<!-- ========== $file ========== -->\\n\\n" >> hugo-site/content/_index.md
+            printf "\n\n<!-- ========== %s ========== -->\n\n" "$file" >> hugo-site/content/_index.md
             cat "$file" >> hugo-site/content/_index.md
           done
 
           echo "===[ Preview of _index.md ]==="
-          head -n 50 hugo-site/content/_index.md || echo "File not found"
-        '
+          head -n 30 hugo-site/content/_index.md || echo "File not found"
 
-      - name: Build site
+      - name: "Build site"
         run: hugo --source hugo-site --minify
 
-      - name: Deploy to GitHub Pages
+      - name: "Deploy to GitHub Pages"
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
