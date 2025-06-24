@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,25 +24,26 @@ jobs:
           echo "=== docs/ contents ==="
           ls -la docs/ || echo "docs/ not found"
 
-      - name: Concatenate all docs to _index.md
+      - name: Concatenate all docs to docs.md
         run: |
-          echo "===[ Creating hugo-site/content/_index.md ]==="
+          echo "===[ Creating hugo-site/content/docs.md ]==="
           mkdir -p hugo-site/content
-          echo "---" > hugo-site/content/_index.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
-          echo "---" >> hugo-site/content/_index.md
-          echo "" >> hugo-site/content/_index.md
+          echo "---" > hugo-site/content/docs.md
+          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/docs.md
+          echo "toc: true" >> hugo-site/content/docs.md
+          echo "---" >> hugo-site/content/docs.md
+          echo "" >> hugo-site/content/docs.md
 
           for f in docs/*.md; do
             echo "Appending: $f"
-            echo "" >> hugo-site/content/_index.md
-            echo "<!-- ========== $f ========== -->" >> hugo-site/content/_index.md
-            cat "$f" >> hugo-site/content/_index.md
-            echo "" >> hugo-site/content/_index.md
+            echo "" >> hugo-site/content/docs.md
+            echo "<!-- ========== $f ========== -->" >> hugo-site/content/docs.md
+            cat "$f" >> hugo-site/content/docs.md
+            echo "" >> hugo-site/content/docs.md
           done
 
-          echo "===[ Preview of _index.md ]==="
-          head -n 30 hugo-site/content/_index.md || echo "File not found"
+          echo "===[ Preview of docs.md ]==="
+          head -n 30 hugo-site/content/docs.md || echo "File not found"
 
       - name: Build site
         run: hugo --source hugo-site --minify
