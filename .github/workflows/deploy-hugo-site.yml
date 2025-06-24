@@ -20,29 +20,28 @@ jobs:
           extended: true
 
       - name: Debug: list docs/ files
-        run: |
-          echo "===[ docs/ contents ]==="
-          ls -la docs/ || echo "docs/ not found"
+        run: bash -c 'ls -la docs/ || echo "docs/ not found"'
 
       - name: Concatenate all docs to _index.md
-        run: |
+        run: bash -c '
           echo "===[ Creating hugo-site/content/_index.md ]==="
           mkdir -p hugo-site/content
 
-          echo '---' > hugo-site/content/_index.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
-          echo '---' >> hugo-site/content/_index.md
-          echo '' >> hugo-site/content/_index.md
+          echo "---" > hugo-site/content/_index.md
+          echo "title: \"1C DevOps JR — Документация\"" >> hugo-site/content/_index.md
+          echo "---" >> hugo-site/content/_index.md
+          echo "" >> hugo-site/content/_index.md
 
           echo "===[ Concatenating files... ]==="
-          ls docs/*.md | sort | while read file; do
+          for file in $(ls docs/*.md | sort); do
             echo "Appending: $file"
-            echo -e "\n\n<!-- ========== $file ========== -->\n\n" >> hugo-site/content/_index.md
+            echo -e "\\n\\n<!-- ========== $file ========== -->\\n\\n" >> hugo-site/content/_index.md
             cat "$file" >> hugo-site/content/_index.md
           done
 
           echo "===[ Preview of _index.md ]==="
           head -n 50 hugo-site/content/_index.md || echo "File not found"
+        '
 
       - name: Build site
         run: hugo --source hugo-site --minify
