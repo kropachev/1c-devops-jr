@@ -19,7 +19,7 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: Debug: list docs/ files
+      - name: Debug list docs files
         run: |
           echo "===[ docs/ contents ]==="
           ls -la docs/ || echo "docs/ not found"
