@@ -54,3 +54,4 @@ EOF
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./hugo-site/public
+  
