@@ -13,40 +13,45 @@ jobs:
         with:
           submodules: true
 
-      - name: "Setup Hugo"
+      - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: "Debug – list docs files"
-        run: bash -c 'ls -la docs/ || echo "docs/ not found"'
-
-      - name: "Concatenate all docs to _index.md"
+      - name: Debug: list docs/ files
         run: |
-          set -e
+          echo "===[ docs/ contents ]==="
+          ls -la docs/ || echo "docs/ not found"
+
+      - name: Concatenate all docs to _index.md
+        run: |
+          echo "===[ Creating hugo-site/content/_index.md ]==="
           mkdir -p hugo-site/content
 
-          echo '---' > hugo-site/content/_index.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
-          echo 'showTableOfContents: true' >> hugo-site/content/_index.md
-          echo '---' >> hugo-site/content/_index.md
-          echo '' >> hugo-site/content/_index.md
+          cat <<EOF > hugo-site/content/_index.md
+---
+title: "1C DevOps JR — Документация"
+toc: true
+---
 
-          echo "===[ Concatenating files... ]==="
-          for file in $(ls docs/*.md | sort); do
+EOF
+
+          for file in $(find docs -type f -name "*.md" | sort); do
             echo "Appending: $file"
-            printf "\n\n<!-- ========== %s ========== -->\n\n" "$file" >> hugo-site/content/_index.md
+            echo -e "\n\n<!-- ========== $file ========== -->\n" >> hugo-site/content/_index.md
             cat "$file" >> hugo-site/content/_index.md
           done
 
+      - name: Preview _index.md
+        run: |
           echo "===[ Preview of _index.md ]==="
           head -n 30 hugo-site/content/_index.md || echo "File not found"
 
-      - name: "Build site"
+      - name: Build site
         run: hugo --source hugo-site --minify
 
-      - name: "Deploy to GitHub Pages"
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
