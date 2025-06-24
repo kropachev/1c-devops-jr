@@ -24,13 +24,13 @@ jobs:
 
       - name: "Concatenate all docs to _index.md"
         run: |
+          set -e
           mkdir -p hugo-site/content
 
-          cat <<EOF > hugo-site/content/_index.md
----
-title: "1C DevOps JR — Документация"
----
-EOF
+          echo '---' > hugo-site/content/_index.md
+          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/_index.md
+          echo '---' >> hugo-site/content/_index.md
+          echo '' >> hugo-site/content/_index.md
 
           echo "===[ Concatenating files... ]==="
           for file in $(ls docs/*.md | sort); do
@@ -40,7 +40,9 @@ EOF
           done
 
           echo "===[ Preview of _index.md ]==="
-          head -n 30 hugo-site/content/_index.md || echo "File not found"
+          echo "------------------------------------------------------------"
+          cat hugo-site/content/_index.md | head -n 50 || echo "File not found"
+          echo "------------------------------------------------------------"
 
       - name: "Build site"
         run: hugo --source hugo-site --minify
