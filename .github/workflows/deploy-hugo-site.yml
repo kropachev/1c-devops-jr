@@ -19,7 +19,7 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: Debug: list docs/ files
+      - name: Debug list docs/ files
         run: bash -c 'ls -la docs/ || echo "docs/ not found"'
 
       - name: Concatenate all docs to _index.md
