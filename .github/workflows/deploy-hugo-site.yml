@@ -25,19 +25,19 @@ jobs:
           ls -la docs/ || echo "docs/ not found"
 
       - name: Concatenate all docs to _index.md
+        shell: bash
         run: |
           echo "===[ Creating hugo-site/content/_index.md ]==="
           mkdir -p hugo-site/content
 
-          cat <<EOF > hugo-site/content/_index.md
----
-title: "1C DevOps JR — Документация"
-toc: true
----
+          {
+            echo "---"
+            echo 'title: "1C DevOps JR — Документация"'
+            echo "toc: true"
+            echo "---"
+          } > hugo-site/content/_index.md
 
-EOF
-
-          for file in $(find docs -type f -name "*.md" | sort); do
+          find docs -type f -name "*.md" | sort | while read file; do
             echo "Appending: $file"
             echo -e "\n\n<!-- ========== $file ========== -->\n" >> hugo-site/content/_index.md
             cat "$file" >> hugo-site/content/_index.md
