@@ -19,31 +19,37 @@ jobs:
           hugo-version: '0.147.8'
           extended: true
 
-      - name: Debug list docs files
+      - name: Debug: list docs/ files
         run: |
           echo "===[ docs/ contents ]==="
           ls -la docs/ || echo "docs/ not found"
 
-      - name: Concatenate all docs to _index.md
+      - name: Concatenate all docs to docs.md
         run: |
-          echo "===[ Creating hugo-site/content/_index.md ]==="
+          echo "===[ Creating hugo-site/content/docs.md ]==="
           mkdir -p hugo-site/content
+          echo "---" > hugo-site/content/docs.md
+          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/docs.md
+          echo "toc: true" >> hugo-site/content/docs.md
+          echo "---" >> hugo-site/content/docs.md
+          echo "" >> hugo-site/content/docs.md
 
-          echo "---" > hugo-site/content/_index.md
-          echo "title: 1C DevOps JR — Документация" >> hugo-site/content/_index.md
-          echo "toc: true" >> hugo-site/content/_index.md
-          echo "---" >> hugo-site/content/_index.md
-
-          find docs -type f -name "*.md" | sort | while read file; do
+          for file in docs/*.md; do
             echo "Appending: $file"
-            echo -e "\n\n<!-- ========== $file ========== -->\n" >> hugo-site/content/_index.md
-            cat "$file" >> hugo-site/content/_index.md
+            echo "<!-- ========== $file ========== -->" >> hugo-site/content/docs.md
+            echo "" >> hugo-site/content/docs.md
+            cat "$file" >> hugo-site/content/docs.md
+            echo "" >> hugo-site/content/docs.md
+            echo "" >> hugo-site/content/docs.md
           done
 
-      - name: Preview _index.md
+          echo "===[ Preview of docs.md ]==="
+          head -n 30 hugo-site/content/docs.md || echo "File not found"
+
+      - name: Copy images
         run: |
-          echo "===[ Preview of _index.md ]==="
-          head -n 30 hugo-site/content/_index.md || echo "File not found"
+          mkdir -p hugo-site/static/images
+          cp -r docs/images/* hugo-site/static/images/ || echo "No images found"
 
       - name: Build site
         run: hugo --source hugo-site --minify
