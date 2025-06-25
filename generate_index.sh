@@ -5,6 +5,8 @@ DOCS_DIR="docs"
 SIDEBAR_FILE="$DOCS_DIR/_Sidebar.md"
 OUTPUT_FILE="hugo-site/content/_index.md"
 
+mkdir -p "$(dirname "$OUTPUT_FILE")"
+
 # Start _index.md with required front matter (enable TOC and set up Home menu link)
 cat > "$OUTPUT_FILE" << 'EOL'
 ---
