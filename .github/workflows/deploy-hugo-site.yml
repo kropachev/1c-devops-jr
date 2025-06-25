@@ -1,56 +1,35 @@
-name: Deploy Hugo site to GitHub Pages
+name: Build and Deploy Hugo Site
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v3
         with:
           submodules: true
+          fetch-depth: 0
+
+      - name: Generate homepage content
+        run: bash generate_index.sh
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.147.8'
+          hugo-version: 'latest'
           extended: true
 
-      - name: Debug – list docs files
-        run: |
-          echo "=== docs/ contents ==="
-          ls -la docs/ || echo "docs/ not found"
-
-      - name: Concatenate all docs to content/page/docs.md
-        run: |
-          echo "===[ Creating hugo-site/content/page/docs.md ]==="
-          mkdir -p hugo-site/content/page
-          echo "---" > hugo-site/content/page/docs.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/page/docs.md
-          echo 'type: "page"' >> hugo-site/content/page/docs.md
-          echo "toc: true" >> hugo-site/content/page/docs.md
-          echo "---" >> hugo-site/content/page/docs.md
-          echo "" >> hugo-site/content/page/docs.md
-
-          for f in docs/*.md; do
-            echo "Appending: $f"
-            echo "" >> hugo-site/content/page/docs.md
-            echo "<!-- ========== $f ========== -->" >> hugo-site/content/page/docs.md
-            cat "$f" >> hugo-site/content/page/docs.md
-            echo "" >> hugo-site/content/page/docs.md
-          done
-
-          echo "===[ Preview of page/docs.md ]==="
-          head -n 30 hugo-site/content/page/docs.md || echo "File not found"
-
       - name: Build site
-        run: hugo --source hugo-site --minify
+        run: hugo --source hugo-site
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./hugo-site/public
+          publish_dir: hugo-site/public
+          publish_branch: gh-pages
+          cname: 1c-devops-jr.kropachev.digital

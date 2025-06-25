@@ -1,15 +1,13 @@
 baseURL = "https://1c-devops-jr.kropachev.digital/"
-languageCode = "ru-ru"
-title = "1C DevOps JR"
+languageCode = "ru-RU"
+title = "1C DevOps Jr"
 theme = "hugo-theme-stack"
 
-[params]
-  toc = true
+[params.article]
+toc = true
+math = false
 
-[params.homepage]
-  image = "https://github.com/kropachev.png"
-
-[[menu.main]]
-  name = "Документация"
-  url = "/page/docs/"
-  weight = 1
+[params.tableOfContents]
+startLevel = 2
+endLevel = 4
+ordered = true
