@@ -26,22 +26,20 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     leading_spaces=${line%%[^ ]*}
     indent=${#leading_spaces}
     level=$(( indent / 2 ))  # считаем уровень списка (2 пробела = новый уровень)
-    # Проверяем, содержит ли строка ссылку [Text](path)
-    if [[ $line =~ \[([^]]+)\]\(([^)]+)\) ]]; then
-        title="${BASH_REMATCH[1]}"     # текст ссылки = заголовок раздела
-        filepath="${BASH_REMATCH[2]}"  # путь к файлу
-        # Удаляем префикс "docs/" и ведущий слеш, если есть
+
+    # Попробуем извлечь ссылку и заголовок
+    link_text=$(echo "$line" | grep -oP '\[.*?\]\(.*?\)' || true)
+    if [[ -n "$link_text" ]]; then
+        title=$(echo "$link_text" | sed -E 's/^\[(.*)\]\(.*\)$/\1/')
+        filepath=$(echo "$link_text" | sed -E 's/^\[.*\]\((.*)\)$/\1/')
         filepath="${filepath#/}"
         filepath="${filepath#docs/}"
-        # Определяем уровень заголовка для этого пункта (H2 для level=0, H3 для level=1, ...)
         heading_level=$(( 2 + level ))
         heading_marks=$(printf '%0.s#' $(seq 1 $heading_level))
         echo "${heading_marks} ${title}" >> "$output_page"
         echo "" >> "$output_page"
-        # Вставляем содержимое соответствующего файла
         file_path="$docs_dir/$filepath"
         if [[ -f "$file_path" ]]; then
-            # Пропускаем первую строку, если это заголовок, и увеличиваем уровень остальных заголовков на 1
             awk 'NR==1 { if($1 ~ /^#+$/) { next } }
                  /^#{1,5} / { sub(/^#/, "##"); }
                  { print }' "$file_path" >> "$output_page"
@@ -50,8 +48,7 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
         fi
         echo "" >> "$output_page"
     else
-        # Строка без ссылки (может быть название секции в сайдбаре без собственного файла)
-        section_title="${line//* /}"   # убираем маркер списка "*" 
+        section_title="${line//* /}"
         section_title="${section_title## }"
         if [[ -n "$section_title" ]]; then
             heading_level=$(( 2 + level ))
