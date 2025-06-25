@@ -2,6 +2,7 @@ baseURL = "https://1c-devops-jr.kropachev.digital/"
 languageCode = "ru-RU"
 title = "1C DevOps Jr"
 theme = "hugo-theme-stack"
+disableKinds = ["home"]
 
 [params.article]
 toc = true
