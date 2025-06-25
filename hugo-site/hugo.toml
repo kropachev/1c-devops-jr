@@ -12,3 +12,6 @@ math = false
 startLevel = 2
 endLevel = 4
 ordered = true
+
+[[params.widgets.page]]
+type = "toc" 

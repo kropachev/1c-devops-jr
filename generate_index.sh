@@ -1,51 +1,69 @@
 #!/usr/bin/env bash
 set -e
 
-DOCS_DIR="docs"
-SIDEBAR_FILE="$DOCS_DIR/_Sidebar.md"
-OUTPUT_FILE="hugo-site/content/_index.md"
+# Папки исходников и назначений
+docs_dir="docs"
+output_page="content/p/wiki.md"
+sidebar_file="$docs_dir/_Sidebar.md"
 
-mkdir -p "$(dirname "$OUTPUT_FILE")"
+# Создаем директорию для выходного файла (если нет)
+mkdir -p "$(dirname "$output_page")"
 
-# Start _index.md with required front matter (enable TOC and set up Home menu link)
-cat > "$OUTPUT_FILE" << 'EOL'
----
-toc: true
-menu:
-  main:
-    name: Home
-    weight: -100
-    params:
-      icon: home
----
-EOL
+# Записываем начало выходного файла с фронтматтером
+cat > "$output_page" <<EOT
++++
+title = "Документация"
+toc = true
++++
 
-# Append all docs in the order listed in _Sidebar.md
-# Extract file names from links in _Sidebar.md (everything between parentheses)
-grep -oP '(?<=\().+?(?=\))' "$SIDEBAR_FILE" | while read -r FILE; do
-  # Ensure the file has .md extension
-  [[ "$FILE" != *.md ]] && FILE="$FILE.md"
-  # Concatenate the file content if it exists
-  if [[ -f "$DOCS_DIR/$FILE" ]]; then
-    # Adjust image paths: make any "](images/..." link root-relative for Hugo
-    sed -e 's#\](images/#\](/images/#g' "$DOCS_DIR/$FILE" >> "$OUTPUT_FILE"
-    echo -e "\n" >> "$OUTPUT_FILE"   # Add an empty line between files
-  fi
-done
+EOT
 
-# Copy images and other static assets from docs to Hugo's static directory
-if [[ -d "$DOCS_DIR/images" ]]; then
-  rm -rf hugo-site/static/images
-  mkdir -p hugo-site/static
-  cp -R "$DOCS_DIR/images" hugo-site/static/
+# Проходим по каждой строке файла _Sidebar.md
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    # Пропускаем пустые строки
+    [[ -z "${line//[[:space:]]/}" ]] && continue
+    # Определяем уровень вложенности по числу ведущих пробелов
+    leading_spaces=${line%%[^ ]*}
+    indent=${#leading_spaces}
+    level=$(( indent / 2 ))  # считаем уровень списка (2 пробела = новый уровень)
+    # Проверяем, содержит ли строка ссылку [Text](path)
+    if [[ "$line" =~ \[([^]]+)\]\(([^)]+)\) ]]; then
+        title="${BASH_REMATCH[1]}"     # текст ссылки = заголовок раздела
+        filepath="${BASH_REMATCH[2]}"  # путь к файлу
+        # Удаляем префикс "docs/" и ведущий слеш, если есть
+        filepath="${filepath#/}"
+        filepath="${filepath#docs/}"
+        # Определяем уровень заголовка для этого пункта (H2 для level=0, H3 для level=1, ...)
+        heading_level=$(( 2 + level ))
+        heading_marks=$(printf '%0.s#' $(seq 1 $heading_level))
+        echo "${heading_marks} ${title}" >> "$output_page"
+        echo "" >> "$output_page"
+        # Вставляем содержимое соответствующего файла
+        file_path="$docs_dir/$filepath"
+        if [[ -f "$file_path" ]]; then
+            # Пропускаем первую строку, если это заголовок, и увеличиваем уровень остальных заголовков на 1
+            awk 'NR==1 { if($1 ~ /^#+$/) { next } }
+                 /^#{1,5} / { sub(/^#/, "##"); }
+                 { print }' "$file_path" >> "$output_page"
+        else
+            echo "*Файл '${filepath}' не найден.*" >> "$output_page"
+        fi
+        echo "" >> "$output_page"
+    else
+        # Строка без ссылки (может быть название секции в сайдбаре без собственного файла)
+        section_title="${line//* /}"   # убираем маркер списка "*" 
+        section_title="${section_title## }"
+        if [[ -n "$section_title" ]]; then
+            heading_level=$(( 2 + level ))
+            heading_marks=$(printf '%0.s#' $(seq 1 $heading_level))
+            echo "${heading_marks} ${section_title}" >> "$output_page"
+            echo "" >> "$output_page"
+        fi
+    fi
+done < "$sidebar_file"
+
+# Копируем все изображения из docs/images в статическую папку сайта, чтобы ссылки работали
+if [[ -d "$docs_dir/images" ]]; then
+    mkdir -p static/p/wiki/images
+    cp -R "$docs_dir/images/"* static/p/wiki/images/ 2>/dev/null || true
 fi
-
-# (Optional) Copy any other attachment directories or files from docs to static
-for ITEM in "$DOCS_DIR"/*; do
-  if [[ -d "$ITEM" && "$(basename "$ITEM")" != "images" ]]; then
-    cp -R "$ITEM" hugo-site/static/
-  fi
-  if [[ -f "$ITEM" && "$ITEM" != *.md ]]; then
-    cp "$ITEM" hugo-site/static/
-  fi
-done
