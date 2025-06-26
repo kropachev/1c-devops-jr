@@ -1,61 +1,57 @@
-name: Deploy Hugo site to GitHub Pages
+name: Build and Deploy Hugo Site
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: github-pages
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v4
         with:
           submodules: true
+          fetch-depth: 0
+
+      - name: Generate wiki page
+        run: bash generate_index.sh
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.147.8'
+          hugo-version: latest
           extended: true
 
-      - name: Debug list docs/ files
-        run: |
-          echo "===[ docs/ contents ]==="
-          ls -la docs/ || echo "docs/ not found"
-
-      - name: Concatenate all docs to p/wiki.md
-        run: |
-          echo "===[ Creating hugo-site/content/p/wiki.md ]==="
-          mkdir -p hugo-site/content
-          echo "---" > hugo-site/content/p/wiki.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/p/wiki.md
-          echo "toc: true" >> hugo-site/content/p/wiki.md
-          echo "---" >> hugo-site/content/p/wiki.md
-          echo "" >> hugo-site/content/p/wiki.md
-
-          for file in docs/*.md; do
-            echo "Appending: $file"
-            echo "<!-- ========== $file ========== -->" >> hugo-site/content/p/wiki.md
-            echo "" >> hugo-site/content/p/wiki.md
-            cat "$file" >> hugo-site/content/p/wiki.md
-            echo "" >> hugo-site/content/p/wiki.md
-            echo "" >> hugo-site/content/p/wiki.md
-          done
-
-          echo "===[ Preview of p/wiki.md ]==="
-          head -n 30 hugo-site/content/p/wiki.md || echo "File not found"
-
-      - name: Copy images
-        run: |
-          mkdir -p hugo-site/static/images
-          cp -r docs/images/* hugo-site/static/images/ || echo "No images found"
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
       - name: Build site
-        run: hugo --source hugo-site --minify
+        run: |
+          hugo \
+            --source hugo-site \
+            --gc \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: hugo-site/public
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: hugo-site/public
+        id: deployment
+        uses: actions/deploy-pages@v4
