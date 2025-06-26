@@ -2,20 +2,27 @@ name: Deploy Hugo site to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
@@ -24,18 +31,22 @@ jobs:
         run: bash generate_index.sh
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: 'latest'
           extended: true
 
-      - name: Build site
-        run: hugo --source hugo-site
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
-      - name: Delete old github-pages artifacts
-        uses: geekyeggo/delete-artifact@v2
-        with:
-          name: github-pages
+      - name: Build site
+        run: |
+          hugo \
+            --source hugo-site \
+            --gc \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -43,8 +54,10 @@ jobs:
           path: hugo-site/public
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
         id: deployment
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
+        uses: actions/deploy-pages@v4
+
+outputs:
+  page_url:
+    description: 'URL of the published GitHub Pages site'
+    value: ${{ jobs.deploy.outputs.page_url }}
