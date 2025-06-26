@@ -3,7 +3,7 @@ set -e
 
 # Папки исходников и назначений
 docs_dir="docs"
-output_page="content/p/wiki.md"
+output_page="hugo-site/content/p/wiki.md"
 sidebar_file="$docs_dir/_Sidebar.md"
 
 # Создаем директорию для выходного файла (если нет)
