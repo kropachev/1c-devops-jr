@@ -58,6 +58,7 @@ done < "$sidebar_file"
 
 # копируем изображения
 if [[ -d "$docs_dir/images" ]]; then
-  mkdir -p hugo-site/static/p/wiki/images
-  cp -R "$docs_dir/images/"* hugo-site/static/p/wiki/images/ 2>/dev/null || true
+  rm -rf hugo-site/static/images
+  mkdir -p hugo-site/static/images
+  cp -R "$docs_dir/images/"* hugo-site/static/images/
 fi
