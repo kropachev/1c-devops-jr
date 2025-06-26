@@ -20,33 +20,35 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 
   indent=$(( ${#line} - ${#line##[ ]*} ))
   level=$(( indent / 2 ))
+  heading_marks=$(printf '%0.s#' $(seq 1 $(( level + 2 ))))
 
-  if [[ "$line" =~ \[([^]]+)\]\(([^)]+)\) ]]; then
-    title="${BASH_REMATCH[1]}"
-    filepath="${BASH_REMATCH[2]}"
+  # проверка наличия ссылки через grep
+  if echo "$line" | grep -qE '\[.*\]\(.*\)'; then
+    title=$(echo "$line" | sed -E 's/^\s*•?\s*\[(.*)\]\(.*\).*/\1/')
+    filepath=$(echo "$line" | sed -E 's/.*\((.*)\).*/\1/')
     filepath="${filepath#/}"
     filepath="${filepath#docs/}"
     [[ "$filepath" != *.md ]] && filepath="${filepath}.md"
 
-    heading_marks=$(printf '%0.s#' $(seq 1 $(( level + 2 ))))
     echo "${heading_marks} ${title}" >> "$output_page"
     echo "" >> "$output_page"
 
     file_path="$docs_dir/$filepath"
     if [[ -f "$file_path" ]]; then
-      awk 'NR==1 { if($1 ~ /^#+$/) { next } }
-           /^#{1,5} / { sub(/^#/, "##"); }
+      awk 'NR==1 { if($1 ~ /^#+$/) next }
+           /^#{1,5} / { sub(/^#/, "##") }
            { print }' "$file_path" >> "$output_page"
     else
-      echo "_Файл '$filepath' не найден в docs/_Sidebar.md. Проверьте регистр или путь._" >> "$output_page"
+      echo "_Файл '$filepath' не найден в docs/_Sidebar.md_" >> "$output_page"
     fi
     echo "" >> "$output_page"
 
   else
-    section_title="${line##* }"
-    heading_marks=$(printf '%0.s#' $(seq 1 $(( level + 2 ))))
-    echo "${heading_marks} ${section_title}" >> "$output_page"
-    echo "" >> "$output_page"
+    section_title=$(echo "$line" | sed -E 's/^\s*•?\s*(.*)/\1/')
+    if [[ -n "$section_title" ]]; then
+      echo "${heading_marks} ${section_title}" >> "$output_page"
+      echo "" >> "$output_page"
+      fi
   fi
 done < "$sidebar_file"
 
