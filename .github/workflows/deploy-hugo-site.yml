@@ -1,4 +1,4 @@
-name: Build and Deploy Hugo Site
+name: Deploy Hugo site to GitHub Pages
 
 on:
   push:
@@ -11,13 +11,14 @@ permissions:
   id-token: write
 
 concurrency:
-  group: build-deploy
+  group: pages
   cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: github-pages
+    environment:
+      name: github-pages
 
     steps:
       - name: Checkout source
