@@ -16,15 +16,18 @@ toc = true
 EOT
 
 while IFS='' read -r line || [[ -n "$line" ]]; do
+  # пропускаем пустые строки
   [[ -z "${line//[[:space:]]/}" ]] && continue
 
-  indent=$(( ${#line} - ${#line##[ ]*} ))
+  # считаем уровень вложенности по числу ведущих пробелов
+  leading_spaces="${line%%[^ ]*}"
+  indent=${#leading_spaces}
   level=$(( indent / 2 ))
   heading_marks=$(printf '%0.s#' $(seq 1 $(( level + 2 ))))
 
-  # проверка наличия ссылки через grep
+  # проверяем наличие Markdown-ссылки
   if echo "$line" | grep -qE '\[.*\]\(.*\)'; then
-    title=$(echo "$line" | sed -E 's/^\s*•?\s*\[(.*)\]\(.*\).*/\1/')
+    title=$(echo "$line" | sed -E 's/^\s*[-*]?\s*\[(.*)\]\(.*\).*/\1/')
     filepath=$(echo "$line" | sed -E 's/.*\((.*)\).*/\1/')
     filepath="${filepath#/}"
     filepath="${filepath#docs/}"
@@ -39,19 +42,21 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
            /^#{1,5} / { sub(/^#/, "##") }
            { print }' "$file_path" >> "$output_page"
     else
-      echo "_Файл '$filepath' не найден в docs/_Sidebar.md_" >> "$output_page"
+      echo "_Файл '$filepath' не найден._" >> "$output_page"
     fi
     echo "" >> "$output_page"
 
   else
-    section_title=$(echo "$line" | sed -E 's/^\s*•?\s*(.*)/\1/')
+    section_title=$(echo "$line" | sed -E 's/^\s*[-*]?\s*(.*)/\1/')
     if [[ -n "$section_title" ]]; then
       echo "${heading_marks} ${section_title}" >> "$output_page"
       echo "" >> "$output_page"
-      fi
+    fi
   fi
+
 done < "$sidebar_file"
 
+# копируем изображения
 if [[ -d "$docs_dir/images" ]]; then
   mkdir -p hugo-site/static/p/wiki/images
   cp -R "$docs_dir/images/"* hugo-site/static/p/wiki/images/ 2>/dev/null || true
