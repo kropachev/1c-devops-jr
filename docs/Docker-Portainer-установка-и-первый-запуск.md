@@ -21,7 +21,7 @@ curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-ag
 curl -L -k https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
 ```
 
-Portainer использует порт `9000`, как и Sonar. Необходимо изменить содержимое файла, оставив только порт `9443`.
+Portainer использует порт `9000`, как и Sonar. Необходимо изменить содержимое файла, оставив только порт `9443`.  
 ![Alt text](images/docker-portainer-agent-stack.png)
 
 Устанавливаем.
