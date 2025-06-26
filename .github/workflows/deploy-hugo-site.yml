@@ -24,27 +24,27 @@ jobs:
           echo "===[ docs/ contents ]==="
           ls -la docs/ || echo "docs/ not found"
 
-      - name: Concatenate all docs to docs.md
+      - name: Concatenate all docs to p/wiki.md
         run: |
-          echo "===[ Creating hugo-site/content/docs.md ]==="
+          echo "===[ Creating hugo-site/content/p/wiki.md ]==="
           mkdir -p hugo-site/content
-          echo "---" > hugo-site/content/docs.md
-          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/docs.md
-          echo "toc: true" >> hugo-site/content/docs.md
-          echo "---" >> hugo-site/content/docs.md
-          echo "" >> hugo-site/content/docs.md
+          echo "---" > hugo-site/content/p/wiki.md
+          echo 'title: "1C DevOps JR — Документация"' >> hugo-site/content/p/wiki.md
+          echo "toc: true" >> hugo-site/content/p/wiki.md
+          echo "---" >> hugo-site/content/p/wiki.md
+          echo "" >> hugo-site/content/p/wiki.md
 
           for file in docs/*.md; do
             echo "Appending: $file"
-            echo "<!-- ========== $file ========== -->" >> hugo-site/content/docs.md
-            echo "" >> hugo-site/content/docs.md
-            cat "$file" >> hugo-site/content/docs.md
-            echo "" >> hugo-site/content/docs.md
-            echo "" >> hugo-site/content/docs.md
+            echo "<!-- ========== $file ========== -->" >> hugo-site/content/p/wiki.md
+            echo "" >> hugo-site/content/p/wiki.md
+            cat "$file" >> hugo-site/content/p/wiki.md
+            echo "" >> hugo-site/content/p/wiki.md
+            echo "" >> hugo-site/content/p/wiki.md
           done
 
-          echo "===[ Preview of docs.md ]==="
-          head -n 30 hugo-site/content/docs.md || echo "File not found"
+          echo "===[ Preview of p/wiki.md ]==="
+          head -n 30 hugo-site/content/p/wiki.md || echo "File not found"
 
       - name: Copy images
         run: |
