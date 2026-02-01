@@ -4,7 +4,7 @@
   * [Настройка kubectl](03-01-configure-kubectl)
   * [HTTPS для сервисов в k3s](03-02-https-for-ci)
 * Установка приложений
-  * [🏗️ Установка Portainer](04-01-install-portainer)
+  * [🏗️ Установка Portainer](04-01-install-portainerd)
   * [🐳 Установка Docker Registry](04-02-install-registry)
   * [🦊 Установка GitLab](04-03-Install-gitlab)
     * [Ошибка SSL certificate problem: unable to get local issuer certificate](04-03-01-gitlab-SSL-certificate-problem)
