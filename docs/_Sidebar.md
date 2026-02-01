@@ -1,6 +1,5 @@
-[DevOps, быстрый старт (Теперь в Kubernetes)](Home)
+[DevOps, быстрый старт (Теперь в Kubernetes)](01-intro.md)
 
-* [Введение](01-intro.md)
 * [☸️ Подготовка сервера и установка Kubernetes (K3s)](02-install-k3s-helm.md)
   * [Настройка kubectl](03-01-configure-kubectl.md)
   * [HTTPS для сервисов в k3s](03-02-https-for-ci.md)
